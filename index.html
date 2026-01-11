@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>seni seviyorum</title>
+    <style>
+        /* GENEL SAYFA AYARLARI */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to top, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            height: 100vh;
+            overflow: hidden; /* Kaydırma çubuklarını gizle */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* YAZI AYARLARI */
+        .header-text {
+            position: absolute;
+            top: 15%;
+            text-align: center;
+            color: #d6336c;
+            font-size: 3rem; /* Mobilde küçülecek */
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+            z-index: 10;
+            animation: fadeIn 3s ease-in-out;
+            font-family: 'Brush Script MT', cursive; /* El yazısı stili */
+            width: 90%;
+        }
+
+        /* ÇİÇEK KONTEYNERİ */
+        .garden {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%; /* Ekranın alt %60'ını kaplar */
+            pointer-events: none;
+        }
+
+        /* ÇİÇEK GÖVDESİ VE YAPISI */
+        .flower {
+            position: absolute;
+            bottom: -10px; /* Ekranın hemen altından başlasın */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform-origin: bottom center;
+        }
+
+        .stem {
+            width: 4px;
+            background: linear-gradient(to top, #2d6a4f, #40916c);
+            border-radius: 4px;
+            height: 0; /* Başlangıçta boyu 0 */
+            animation: growStem ease-out forwards;
+        }
+
+        .petals {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #ffeb3b 20%, transparent 20%),
+                        radial-gradient(circle, var(--color) 60%, transparent 60%);
+            background-size: 100% 100%, 100% 100%;
+            background-position: center;
+            border-radius: 50%;
+            opacity: 0;
+            transform: scale(0);
+            animation: bloom 0.5s ease-out forwards;
+            position: relative;
+            top: 5px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        /* ANİMASYONLAR */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes growStem {
+            to { height: var(--height); }
+        }
+
+        @keyframes bloom {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        /* MOBİL UYUMLULUK */
+        @media (max-width: 600px) {
+            .header-text {
+                font-size: 2.2rem;
+                top: 10%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-text">Dogum Günün Kutlu Olsun <br> Lilitom</div>
+    <div class="garden" id="garden"></div>
+
+    <script>
+        // Çiçek Bahçesini Oluşturma
+        const garden = document.getElementById('garden');
+        const flowerColors = ['#ff6b6b', '#f06595', '#cc5de8', '#845ef7', '#5c7cfa', '#ff922b'];
+
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.classList.add('flower');
+
+            // Rastgele özellikler
+            const randomLeft = Math.random() * 95 + 2; // %2 ile %97 arası konum
+            const randomHeight = Math.random() * 200 + 150; // 150px ile 350px arası boy
+            const randomDelay = Math.random() * 2; // 0-2 saniye arası gecikme
+            const randomColor = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+            
+            // CSS değişkenlerini ata
+            flower.style.left = `${randomLeft}%`;
+            
+            // Çiçek parçaları
+            const petals = document.createElement('div');
+            petals.classList.add('petals');
+            petals.style.setProperty('--color', randomColor);
+            petals.style.animationDelay = `${randomDelay + 1}s`; // Sap büyüdükten sonra açsın
+
+            const stem = document.createElement('div');
+            stem.classList.add('stem');
+            stem.style.setProperty('--height', `${randomHeight}px`);
+            stem.style.animationDuration = '1.5s';
+            stem.style.animationDelay = `${randomDelay}s`;
+
+            flower.appendChild(petals);
+            flower.appendChild(stem);
+            
+            // Rüzgar efekti ekle
+            flower.style.animation = `sway ${Math.random() * 2 + 2}s infinite ease-in-out alternate`;
+
+            garden.appendChild(flower);
+        }
+
+        // 30 adet çiçek üret
+        for(let i = 0; i < 30; i++) {
+            createFlower();
+        }
+    </script>
+</body>
+</html>
